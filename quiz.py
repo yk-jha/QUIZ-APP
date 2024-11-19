@@ -130,21 +130,26 @@ st.subheader(f"Question {current_question + 1}: {question_data['question']}")
 # Display options as radio buttons
 selected_option = st.radio("Choose your answer:", question_data["options"], key=f"question_{current_question}")
 
-# Feedback and move to next question
-if st.session_state.answered:
+# Submit Button to evaluate the answer
+if st.button("Submit Answer"):
     if selected_option == question_data["options"][question_data["answer"]]:
         st.success("Correct! 🎉")
         st.session_state.score += 1
     else:
         st.error(f"Incorrect! The correct answer is: {question_data['options'][question_data['answer']]}")
 
-    # Move to the next question after feedback
-    if current_question + 1 < len(quiz_data):
-        st.session_state.current_question += 1
-    else:
-        st.write(f"🎓 **Quiz Finished!** Your final score is **{st.session_state.score}/{len(quiz_data)}**.")
-        st.stop()
-
-# "Next" button to allow moving to the next question
-if st.button("Next"):
+    # Mark as answered
     st.session_state.answered = True
+
+# Next Button to move to the next question
+if st.button("Next Question"):
+    if st.session_state.answered:
+        if current_question + 1 < len(quiz_data):
+            st.session_state.current_question += 1
+            st.session_state.answered = False  # Reset for the next question
+        else:
+            st.write(f"🎓 **Quiz Finished!** Your final score is **{st.session_state.score}/{len(quiz_data)}**.")
+            st.stop()  # Stop the quiz after last question
+    else:
+        st.warning("Please submit your answer first!")
+
