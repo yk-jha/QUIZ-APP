@@ -5,7 +5,7 @@ quiz_data = [
     {
         "question": "What is the time complexity of a binary search algorithm?",
         "options": ["O(n)", "O(log n)", "O(n^2)", "O(1)"],
-        "answer": 1  
+        "answer": 1  # Index of the correct option
     },
     {
         "question": "Which data structure is used for implementing recursion?",
@@ -114,6 +114,8 @@ if "current_question" not in st.session_state:
     st.session_state.current_question = 0
 if "score" not in st.session_state:
     st.session_state.score = 0
+if "answered" not in st.session_state:
+    st.session_state.answered = False
 
 # Display the quiz
 st.title("Programming Quiz")
@@ -128,17 +130,21 @@ st.subheader(f"Question {current_question + 1}: {question_data['question']}")
 # Display options as radio buttons
 selected_option = st.radio("Choose your answer:", question_data["options"], key=f"question_{current_question}")
 
-# Submit button
-if st.button("Submit"):
+# Feedback and move to next question
+if st.session_state.answered:
     if selected_option == question_data["options"][question_data["answer"]]:
         st.success("Correct! 🎉")
         st.session_state.score += 1
     else:
         st.error(f"Incorrect! The correct answer is: {question_data['options'][question_data['answer']]}")
 
-    # Move to the next question
+    # Move to the next question after feedback
     if current_question + 1 < len(quiz_data):
         st.session_state.current_question += 1
     else:
         st.write(f"🎓 **Quiz Finished!** Your final score is **{st.session_state.score}/{len(quiz_data)}**.")
         st.stop()
+
+# "Next" button to allow moving to the next question
+if st.button("Next"):
+    st.session_state.answered = True
