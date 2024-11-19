@@ -55,7 +55,7 @@ quiz_data = [
     {
         "question": "What is the technique of hiding implementation details called?",
         "options": ["Abstraction", "Encapsulation", "Polymorphism", "Inheritance"],
-        "answer": 1
+        "answer": 0
     },
     {
         "question": "What is the keyword in Python to define a function?",
